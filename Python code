@@ -1,0 +1,14 @@
+from diffusers import StableDiffusionPipeline
+import torch
+import gradio as gr
+
+# Load pre-trained model
+model = StableDiffusionPipeline.from_pretrained("runwayml/stable-diffusion-v1-5").to("cuda" if torch.cuda.is_available() else "cpu")
+
+def generate_image(prompt):
+    image = model(prompt).images[0]
+    return image
+
+# Gradio Web Interface
+demo = gr.Interface(fn=generate_image, inputs="text", outputs="image", title="AI Image Generator")
+demo.launch()
